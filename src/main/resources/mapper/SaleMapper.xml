@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.farm.vegetablesales.mapper.SaleMapper">
+    
+    <resultMap id="BaseResultMap" type="com.farm.vegetablesales.entity.Sale">
+        <id column="id" property="id" />
+        <result column="vegetable_id" property="vegetableId" />
+        <result column="customer_id" property="customerId" />
+        <result column="quantity" property="quantity" />
+        <result column="price" property="price" />
+        <result column="sale_date" property="saleDate" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="vegetable_name" property="vegetableName" />
+        <result column="customer_name" property="customerName" />
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.farm.vegetablesales.entity.Sale" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sales (
+            vegetable_id,
+            customer_id,
+            quantity,
+            price,
+            sale_date,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{vegetableId},
+            #{customerId},
+            #{quantity},
+            #{price},
+            #{saleDate},
+            NOW(),
+            NOW()
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.farm.vegetablesales.entity.Sale">
+        UPDATE sales
+        SET vegetable_id = #{vegetableId},
+            customer_id = #{customerId},
+            quantity = #{quantity},
+            price = #{price},
+            sale_date = #{saleDate},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM sales
+        WHERE id = #{id}
+    </delete>
+    
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT s.id,
+               s.vegetable_id,
+               s.customer_id,
+               s.quantity,
+               s.price,
+               s.sale_date,
+               s.created_at,
+               s.updated_at,
+               v.name as vegetable_name,
+               c.name as customer_name
+        FROM sales s
+        LEFT JOIN vegetables v ON s.vegetable_id = v.id
+        LEFT JOIN customers c ON s.customer_id = c.id
+        WHERE s.id = #{id}
+    </select>
+    
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT s.id,
+               s.vegetable_id,
+               s.customer_id,
+               s.quantity,
+               s.price,
+               s.sale_date,
+               s.created_at,
+               s.updated_at,
+               v.name as vegetable_name,
+               c.name as customer_name
+        FROM sales s
+        LEFT JOIN vegetables v ON s.vegetable_id = v.id
+        LEFT JOIN customers c ON s.customer_id = c.id
+        ORDER BY s.id
+    </select>
+    
+    <select id="selectByDateRange" resultMap="BaseResultMap">
+        SELECT s.id,
+               s.vegetable_id,
+               s.customer_id,
+               s.quantity,
+               s.price,
+               s.sale_date,
+               s.created_at,
+               s.updated_at,
+               v.name as vegetable_name,
+               c.name as customer_name
+        FROM sales s
+        LEFT JOIN vegetables v ON s.vegetable_id = v.id
+        LEFT JOIN customers c ON s.customer_id = c.id
+        WHERE s.sale_date BETWEEN #{startDate} AND #{endDate}
+        <if test="customerId != null">
+            AND s.customer_id = #{customerId}
+        </if>
+        ORDER BY s.sale_date
+    </select>
+    
+    <select id="existsByVegetableId" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM sales
+            WHERE vegetable_id = #{vegetableId}
+        )
+    </select>
+    
+    <select id="existsByCustomerId" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM sales
+            WHERE customer_id = #{customerId}
+        )
+    </select>
+</mapper>

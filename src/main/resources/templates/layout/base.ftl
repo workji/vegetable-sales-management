@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<#macro base title><!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="/vsm/css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -19,10 +19,10 @@
                 <div class="d-flex flex-column">
                     <h3 class="px-3 py-4 mb-0 text-white">メニュー</h3>
                     <nav class="nav flex-column">
-                        <a class="nav-link" href="/vsm/vegetables">野菜管理</a>
-                        <a class="nav-link" href="/vsm/customers">販売先管理</a>
-                        <a class="nav-link" href="/vsm/sales">販売情報管理</a>
-                        <a class="nav-link" href="/vsm/reports/monthly">月別売上情報</a>
+                        <a class="nav-link" href="/vegetables">野菜管理</a>
+                        <a class="nav-link" href="/customers">販売先管理</a>
+                        <a class="nav-link" href="/sales">販売情報管理</a>
+                        <a class="nav-link" href="/reports/monthly">月別売上情報</a>
                     </nav>
                 </div>
             </div>
@@ -46,7 +46,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
-    <script src="/vsm/js/common.js"></script>
+    <script src="/js/common.js"></script>
     <#if scripts??>
         <#list scripts as script>
             <script src="${script}"></script>

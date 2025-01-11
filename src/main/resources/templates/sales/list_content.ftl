@@ -13,8 +13,8 @@
             <#list sales as sale>
                 <tr>
                     <td>${sale.id}</td>
-                    <td>${sale.date!"N/A"}</td>
-                    <td>${sale.amount!"N/A"}</td>
+                    <td>${sale.saleDate?string("yyyy-MM-dd")}</td>
+                    <td>${sale.price?string("0.00")!"N/A"}</td>
                     <td>${sale.customerName}</td>
                     <td>
                         <a href="/sales/edit/${sale.id}">編集</a>

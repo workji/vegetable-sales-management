@@ -1,11 +1,11 @@
-<#import "/layout/base.ftl" as layout>
+<#import "../layout/base.ftl" as layout>
 <@layout.base title="販売先編集">
     <div class="card">
         <div class="card-header">
             販売先編集
         </div>
         <div class="card-body">
-            <form id="customerForm" action="/vsm/customers/${customer.id}/edit" method="post">
+            <form id="customerForm" action="/customers/edit/${customer.id}" method="post">
                 <div class="form-group required">
                     <label for="name">顧客名</label>
                     <input type="text" class="form-control" id="name" name="name" 
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <a href="/vsm/customers" class="btn btn-secondary">キャンセル</a>
+                    <a href="/customers" class="btn btn-secondary">キャンセル</a>
                     <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </form>

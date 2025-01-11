@@ -104,8 +104,12 @@ public class SaleService {
         cal.add(Calendar.MONTH, 1);
         cal.add(Calendar.MILLISECOND, -1);
         Date endDate = cal.getTime();
-        
-        return saleMapper.selectByDateRange(startDate, endDate, customerId);
+
+        if (customerId == null) {
+            return saleMapper.selectByDateRange(startDate, endDate, null);
+        } else {
+            return saleMapper.selectByDateRange(startDate, endDate, customerId);
+        }
     }
 
     /**

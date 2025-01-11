@@ -1,11 +1,11 @@
-<#import "/layout/base.ftl" as layout>
+<#import "../layout/base.ftl" as layout>
 <@layout.base title="販売情報編集">
     <div class="card">
         <div class="card-header">
             販売情報編集
         </div>
         <div class="card-body">
-            <form id="saleForm" action="/vsm/sales/${sale.id}/edit" method="post">
+            <form id="saleForm" action="/sales/edit/${sale.id}" method="post">
                 <div class="form-group required">
                     <label for="vegetableId">野菜</label>
                     <select class="form-control" id="vegetableId" name="vegetableId" required>
@@ -39,7 +39,7 @@
                 <div class="form-group required">
                     <label for="price">単価</label>
                     <input type="number" class="form-control" id="price" name="price" 
-                           value="${sale.price}" min="0" step="0.01" required>
+                           value="${sale.price?string("0.00")!"N/A"}" min="0" step="0.01" required>
                 </div>
 
                 <div class="form-group required">
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <a href="/vsm/sales" class="btn btn-secondary">キャンセル</a>
+                    <a href="/sales" class="btn btn-secondary">キャンセル</a>
                     <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </form>

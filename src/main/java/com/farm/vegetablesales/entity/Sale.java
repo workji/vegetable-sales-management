@@ -1,5 +1,7 @@
 package com.farm.vegetablesales.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -23,6 +25,7 @@ public class Sale {
     private BigDecimal price;
     
     /** 販売日 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date saleDate;
     
     /** 作成日時 */

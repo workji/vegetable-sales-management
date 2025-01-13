@@ -80,6 +80,16 @@ public class CustomerService {
     }
 
     /**
+     * 顧客を取得する
+     *
+     * @param name 顧客名
+     * @return 顧客情報
+     */
+    public Customer getByName(String name) {
+        return customerMapper.selectByName(name);
+    }
+
+    /**
      * すべての顧客を取得する
      *
      * @return 顧客リスト
@@ -111,6 +121,8 @@ public class CustomerService {
             }
             Customer customer = new Customer();
             customer.setName(row.getCell(0).getStringCellValue());
+            customer.setAddress(row.getCell(1).getStringCellValue());
+            customer.setPhone(row.getCell(2).getStringCellValue());
             customers.add(customer);
         }
         workbook.close();

@@ -38,6 +38,12 @@
         FROM vegetables
         WHERE id = #{id}
     </select>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        SELECT id, name, created_at, updated_at
+        FROM vegetables
+        WHERE name = #{name}
+    </select>
     
     <select id="selectAll" resultMap="BaseResultMap">
         SELECT id, name, created_at, updated_at

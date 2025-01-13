@@ -42,6 +42,14 @@ public interface CustomerMapper {
      * @return 顧客情報
      */
     Customer selectById(@Param("id") Long id);
+
+    /**
+     * 顧客を取得する
+     *
+     * @param name 顧客名
+     * @return 顧客情報
+     */
+    Customer selectByName(@Param("name") String name);
     
     /**
      * すべての顧客を取得する

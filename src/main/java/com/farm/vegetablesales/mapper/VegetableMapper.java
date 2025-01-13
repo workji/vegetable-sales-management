@@ -42,7 +42,15 @@ public interface VegetableMapper {
      * @return 野菜情報
      */
     Vegetable selectById(@Param("id") Long id);
-    
+
+    /**
+     * 野菜を取得する
+     *
+     * @param name 野菜名
+     * @return 野菜情報
+     */
+    Vegetable selectByName(@Param("name") String name);
+
     /**
      * すべての野菜を取得する
      *

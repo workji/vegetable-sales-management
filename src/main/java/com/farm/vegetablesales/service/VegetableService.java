@@ -79,6 +79,16 @@ public class VegetableService {
     }
 
     /**
+     * 野菜を取得する
+     *
+     * @param name 野菜名
+     * @return 野菜情報
+     */
+    public Vegetable getByName(String name) {
+        return vegetableMapper.selectByName(name);
+    }
+
+    /**
      * すべての野菜を取得する
      *
      * @return 野菜リスト

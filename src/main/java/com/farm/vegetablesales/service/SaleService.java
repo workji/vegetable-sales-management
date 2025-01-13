@@ -9,11 +9,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +30,12 @@ public class SaleService {
     private final SaleMapper saleMapper;
     private final VegetableMapper vegetableMapper;
     private final CustomerMapper customerMapper;
+
+    @Autowired
+    private VegetableService vegetableService;
+
+    @Autowired
+    private CustomerService customerService;
 
     public SaleService(SaleMapper saleMapper, 
                       VegetableMapper vegetableMapper,
@@ -157,7 +165,11 @@ public class SaleService {
                 continue; // Skip header row
             }
             Sale sale = new Sale();
-            sale.setCustomerName(row.getCell(0).getStringCellValue());
+            sale.setVegetableId(vegetableService.getByName(row.getCell(0).getStringCellValue()).getId());
+            sale.setCustomerId(customerService.getByName(row.getCell(1).getStringCellValue()).getId());
+            sale.setQuantity((int) row.getCell(2).getNumericCellValue());
+            sale.setPrice(BigDecimal.valueOf(row.getCell(3).getNumericCellValue()));
+            sale.setSaleDate(row.getCell(4).getDateCellValue());
             sales.add(sale);
         }
         workbook.close();

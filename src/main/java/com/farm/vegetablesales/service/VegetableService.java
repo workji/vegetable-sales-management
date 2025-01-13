@@ -3,9 +3,16 @@ package com.farm.vegetablesales.service;
 import com.farm.vegetablesales.entity.Vegetable;
 import com.farm.vegetablesales.mapper.VegetableMapper;
 import com.farm.vegetablesales.mapper.SaleMapper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,5 +85,34 @@ public class VegetableService {
      */
     public List<Vegetable> getAll() {
         return vegetableMapper.selectAll();
+    }
+
+    /**
+     * Excelファイルから野菜データを保存する
+     *
+     * @param file Excelファイル
+     * @throws IOException 入出力例外
+     */
+    public void saveVegetableData(MultipartFile file) throws IOException {
+        List<Vegetable> vegetables = parseExcelFile(file);
+        for (Vegetable vegetable : vegetables) {
+            create(vegetable);
+        }
+    }
+
+    private List<Vegetable> parseExcelFile(MultipartFile file) throws IOException {
+        List<Vegetable> vegetables = new ArrayList<>();
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) {
+                continue; // Skip header row
+            }
+            Vegetable vegetable = new Vegetable();
+            vegetable.setName(row.getCell(0).getStringCellValue());
+            vegetables.add(vegetable);
+        }
+        workbook.close();
+        return vegetables;
     }
 }

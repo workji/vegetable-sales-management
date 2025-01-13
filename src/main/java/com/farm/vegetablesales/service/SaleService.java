@@ -1,12 +1,20 @@
 package com.farm.vegetablesales.service;
 
 import com.farm.vegetablesales.entity.Sale;
+import com.farm.vegetablesales.entity.Vegetable;
 import com.farm.vegetablesales.mapper.SaleMapper;
 import com.farm.vegetablesales.mapper.VegetableMapper;
 import com.farm.vegetablesales.mapper.CustomerMapper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -125,5 +133,34 @@ public class SaleService {
         if (customerMapper.selectById(sale.getCustomerId()) == null) {
             throw new IllegalArgumentException("指定された顧客が存在しません。");
         }
+    }
+
+    /**
+     * Excelファイルから野菜データを保存する
+     *
+     * @param file Excelファイル
+     * @throws IOException 入出力例外
+     */
+    public void saveSalesData(MultipartFile file) throws IOException {
+        List<Sale> sales = parseExcelFile(file);
+        for (Sale sale : sales) {
+            create(sale);
+        }
+    }
+
+    private List<Sale> parseExcelFile(MultipartFile file) throws IOException {
+        List<Sale> sales = new ArrayList<>();
+        Workbook workbook = new XSSFWorkbook(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) {
+                continue; // Skip header row
+            }
+            Sale sale = new Sale();
+            sale.setCustomerName(row.getCell(0).getStringCellValue());
+            sales.add(sale);
+        }
+        workbook.close();
+        return sales;
     }
 }

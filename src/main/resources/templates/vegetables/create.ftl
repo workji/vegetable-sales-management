@@ -1,4 +1,4 @@
-<#import "/layout/base.ftl" as layout>
+<#import "../layout/base.ftl" as layout>
 <@layout.base title="野菜登録">
     <div class="card">
         <div class="card-header">

@@ -23,6 +23,7 @@
                         <a class="nav-link" href="/customers">販売先管理</a>
                         <a class="nav-link" href="/sales">販売情報管理</a>
                         <a class="nav-link" href="/reports/monthly">月別売上情報</a>
+                        <a class="nav-link" href="/uploads">一括投入</a>
                     </nav>
                 </div>
             </div>

@@ -5,7 +5,7 @@
             検索条件
         </div>
         <div class="card-body">
-            <form id="reportForm" action="/sales/monthly" method="get">
+            <form id="reportForm" action="/reports/monthly" method="get">
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group required">
@@ -30,10 +30,10 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="customerId">販売先</label>
-                            <select class="form-control" id="customerId" name="customerId">
+                            <select class="form-control" id="customer" name="customer">
                                 <option value="">全て</option>
                                 <#list customers as customer>
-                                    <option value="${customer.id}" <#if customer.id == selectedCustomerId!-1>selected</#if>>
+                                    <option value="${customer.id}" <#if customer.id == searchCustomerId! -1>selected</#if>>
                                         ${customer.name}
                                     </option>
                                 </#list>
@@ -53,7 +53,7 @@
     <div class="card mt-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             売上情報一覧
-            <a href="/sales/monthly/csv" class="btn btn-success">
+            <a href="/reports/monthly/csv?year=${searchYear?c}&month=${searchMonth}&customer=${searchCustomerId}" class="btn btn-success">
                 <i class="bi bi-download"></i> CSVダウンロード
             </a>
         </div>

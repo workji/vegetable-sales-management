@@ -52,10 +52,15 @@
 
     <div class="card mt-3">
         <div class="card-header d-flex justify-content-between align-items-center">
-            売上情報一覧
-            <a href="/reports/monthly/csv?year=${searchYear?c}&month=${searchMonth}&customer=${searchCustomerId}" class="btn btn-success">
-                <i class="bi bi-download"></i> CSVダウンロード
-            </a>
+            <span>売上情報一覧</span>
+            <div class="btn-group">
+                <a href="/reports/monthly/csv?year=${searchYear?c}&month=${searchMonth}&customer=${searchCustomerId}" class="btn btn-success">
+                    <i class="bi bi-download"></i> CSVダウンロード
+                </a>
+                <a href="/reports/monthly/excel?year=${searchYear?c}&month=${searchMonth}&customer=${searchCustomerId}" class="btn btn-primary">
+                    <i class="bi bi-download"></i> Excelダウンロード
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <table>

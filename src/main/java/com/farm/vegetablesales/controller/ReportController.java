@@ -3,7 +3,12 @@ package com.farm.vegetablesales.controller;
 import com.farm.vegetablesales.entity.Sale;
 import com.farm.vegetablesales.service.CustomerService;
 import com.farm.vegetablesales.service.SaleService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -87,5 +92,60 @@ public class ReportController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(csvBytes);
+    }
+
+    @GetMapping("/monthly/excel")
+    public ResponseEntity<ByteArrayResource> downloadMonthlyReportExcel(
+            @RequestParam(value = "year", required = false) Integer year,
+            @RequestParam(value = "month", required = false) Integer month,
+            @RequestParam(value = "customer", required = false) Long customerId) throws IOException {
+
+        LocalDate now = LocalDate.now();
+        if (year == null || month == null) {
+            year = now.getYear();
+            month = now.getMonthValue();
+        }
+        List<Sale> sales = saleService.getMonthlyReport(year, month, customerId);
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Monthly Sales Report");
+
+        // Create Title Row
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Date");
+        headerRow.createCell(2).setCellValue("Price");
+        headerRow.createCell(3).setCellValue("Customer Name");
+
+        // Add Data Rows
+        int rowNum = 1;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        for (Sale sale : sales) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(sale.getId());
+            row.createCell(1).setCellValue(sale.getSaleDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter));
+            row.createCell(2).setCellValue(sale.getPrice().doubleValue());
+            row.createCell(3).setCellValue(sale.getCustomerName());
+        }
+
+        // Judge the number of columns and set the width of the columns
+        for (int i = 0; i < 4; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        byte[] excelBytes = outputStream.toByteArray();
+        String fileName = String.format("report_monthly_%d%02d_%s.xlsx", year, month, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", fileName);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new ByteArrayResource(excelBytes));
     }
 }
